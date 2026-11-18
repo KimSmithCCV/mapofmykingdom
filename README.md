@@ -11,7 +11,8 @@ index.html          The whole page (content, meta tags, schema)
 css/styles.css      All styles (colors and fonts are variables at the top)
 js/main.js          Mobile menu, background clips, trailer sound, clip carousel
 assets/fonts/       Self-hosted Barlow Condensed and Figtree (OFL licenses included)
-assets/video/       hero, play-book (silent loops), trailer (with sound)
+assets/video/       hero, play-book (silent loops), trailer (with sound), clips/ (six scenes)
+assets/captions/    Closed captions (WebVTT) for the trailer and each clip
 assets/img/         Photos, posters, clip stills, OG image, grain texture
 assets/logos/       Partner logos and site icons
 robots.txt          Allows search and AI crawlers
@@ -28,7 +29,17 @@ Open the folder in VS Code and use the Live Server extension, or from a terminal
 python -m http.server 8000
 ```
 
-Then visit http://localhost:8000. (Opening index.html directly works too, but the fonts and videos behave best through a local server.)
+Then visit http://localhost:8000. (Opening index.html directly works too, but the fonts and videos behave best through a local server. Captions only load through a server.)
+
+## Captions
+
+Every video with speech has a caption file in `assets/captions/` with the same name (`trailer.vtt`, `clip-1.vtt` and so on). They are plain text: a time range, then one or two lines of words. To fix a word, open the file and edit the text; leave the time lines alone.
+
+- Trailer: the page draws these itself, above the controls, with a CC button to turn them off (on by default). They're hidden during the opening narration, which already shows the same words large on screen.
+- Clips: the clip player loads the matching file and shows captions by default; viewers can turn them off from the player's menu.
+- Speaker names (MARY SWANDER, TERESA OPHEIM, ANGELA) are in the trailer captions because the on-screen name titles are cropped off on the site.
+
+The captions were transcribed on this computer with whisper.cpp and checked against the transcripts in `_reference/transcripts/`. A new clip needs its own `.vtt` file with a matching name.
 
 ## Design tokens
 
@@ -50,7 +61,6 @@ Search the code for `TODO` and `[` to find each one.
 
 - Show time, venue address, ticket price, and ticket link (show band)
 - Captions for the six clips (optional, recommended for accessibility)
-- Third press quote
 - Social profile URLs (footer)
 - Copyright line (footer)
 - Stoner Theater address in the TheaterEvent schema, plus `offers` once ticket info is set

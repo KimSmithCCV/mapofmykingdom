@@ -5,6 +5,81 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var saveData = navigator.connection && navigator.connection.saveData;
 
+  // ---- Captions (shared by the trailer and the clip player) ----
+  // Caption files (assets/captions/*.vtt) are WebVTT with a timestamp before each word
+  // (<00:00:01.230>word) and a speaker tag (<v Mary Swander>) where a new person starts talking.
+  function vttTime(s) { var p = s.split(":"); return (+p[0]) * 3600 + (+p[1]) * 60 + parseFloat(p[2]); }
+  function parseVtt(text) {
+    var cues = [];
+    text.replace(/\r/g, "").split(/\n\n+/).forEach(function (block) {
+      var lines = block.split("\n"), i = 0;
+      while (i < lines.length && lines[i].indexOf("-->") < 0) i++;
+      var m = i < lines.length && lines[i].match(/([\d:.]+)\s*-->\s*([\d:.]+)/);
+      if (!m) return;
+      var start = vttTime(m[1]), body = lines.slice(i + 1).join(" ");
+      var voice = (body.match(/<v\s+([^>]+)>/) || [])[1] || "";
+      body = body.replace(/<\/?(v|c|i|b|u)\b[^>]*>/g, "");
+      var words = [], t = start;
+      body.split(/<([\d:.]+)>/).forEach(function (part, n) {
+        if (n % 2) { t = vttTime(part); return; }
+        part.trim().split(/\s+/).forEach(function (w) { if (w) words.push({ t: t, text: w }); });
+      });
+      cues.push({ start: start, end: vttTime(m[2]), voice: voice, words: words });
+    });
+    return cues;
+  }
+  // Captions are on unless the viewer turned them off (remembered on this device).
+  var cc = { on: true };
+  try { cc.on = localStorage.getItem("mmk-cc") !== "off"; } catch (e) {}
+  cc.set = function (on) {
+    cc.on = on;
+    try { localStorage.setItem("mmk-cc", on ? "on" : "off"); } catch (e) {}
+    document.querySelectorAll(".js-cc").forEach(function (b) { b.setAttribute("aria-pressed", on ? "true" : "false"); });
+  };
+  // Draws the caption for a moment in time: speaker label (if any), then the phrase,
+  // with the word being spoken in blue.
+  function captioner(el) {
+    var cues = [], shown = null, spans = [];
+    return {
+      load: function (src) {
+        cues = []; shown = null; el.textContent = "";
+        if (!src || !window.fetch) return Promise.resolve();
+        return fetch(src).then(function (r) { return r.ok ? r.text() : ""; })
+          .then(function (txt) { cues = parseVtt(txt); }).catch(function () {});
+      },
+      render: function (t, visible) {
+        var cue = null;
+        if (visible) { for (var i = 0; i < cues.length; i++) { if (t >= cues[i].start && t < cues[i].end) { cue = cues[i]; break; } } }
+        if (cue !== shown) {
+          shown = cue; el.textContent = ""; spans = [];
+          if (cue) {
+            if (cue.voice) {
+              var who = document.createElement("span");
+              who.className = "cap__who"; who.textContent = cue.voice;
+              el.appendChild(who);
+            }
+            var line = document.createElement("span");
+            line.className = "cap__line";
+            cue.words.forEach(function (w, n) {
+              var s = document.createElement("span");
+              s.className = "cap__w"; s.textContent = w.text;
+              line.appendChild(s);
+              if (n < cue.words.length - 1) line.appendChild(document.createTextNode(" "));
+              spans.push(s);
+            });
+            el.appendChild(line);
+          }
+        }
+        if (cue) {
+          var now = -1;
+          for (var k = 0; k < cue.words.length; k++) { if (t >= cue.words[k].t) now = k; }
+          spans.forEach(function (s, k) { s.classList.toggle("is-now", k === now); });
+        }
+        return !!cue;
+      }
+    };
+  }
+
   // Mobile menu
   var toggle = document.querySelector(".nav-toggle");
   var nav = document.getElementById("site-nav");
@@ -19,6 +94,20 @@
         toggle.setAttribute("aria-expanded", "false");
       }
     });
+  }
+
+  // Header turns solid once you scroll past the top (the phone layout pins it in place).
+  var header = document.querySelector(".site-header");
+  if (header) {
+    var onScroll = function () { header.classList.toggle("is-scrolled", window.scrollY > 40); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  // Phones: use the tall hero still too (the video picks its own file through <source media>).
+  var heroVideo = document.querySelector(".js-hero-video");
+  if (heroVideo && heroVideo.dataset.posterMobile && window.matchMedia("(max-width: 640px)").matches) {
+    heroVideo.poster = heroVideo.dataset.posterMobile;
   }
 
   // Silent background clips: stills only for reduced motion or data saver.
@@ -185,6 +274,25 @@
       });
     });
 
+    // Closed captions from assets/captions/trailer.vtt, drawn in our own box above the controls.
+    // During the opening narration the big word-by-word lines already show the same words.
+    var ccEl = document.querySelector(".js-trailer-cc");
+    var ccBtn = document.querySelector(".js-trailer-ccbtn");
+    if (ccEl && ccBtn && window.fetch) {
+      // The <track> is there for browsers without JavaScript; with it, we draw the captions ourselves.
+      var trackEl = trailer.querySelector("track");
+      if (trailer.textTracks && trailer.textTracks[0]) trailer.textTracks[0].mode = "disabled";
+      var cap = captioner(ccEl);
+      cap.load(trackEl ? trackEl.getAttribute("src") : "assets/captions/trailer.vtt").then(frame);
+      ccBtn.addEventListener("click", function () { cc.set(!cc.on); frame(); });
+      onFrame.push(function () {
+        var t = trailer.currentTime;
+        box.classList.toggle("cc-on", cc.on);
+        box.classList.toggle("cc-showing", cap.render(t, cc.on && !(lineEl && t < INTRO_END)));
+      });
+      cc.set(cc.on);
+    }
+
     if (lineEl) {
       box.classList.add("has-captions");
       var shown = null, spans = [];
@@ -270,11 +378,25 @@
     var pv = player.querySelector("video");
     var pt = player.querySelector(".player__title");
     function closePlayer() { pv.pause(); pv.removeAttribute("src"); pv.load(); if (player.open) { player.close(); } }
+    // Captions over the clip, drawn the same way as the trailer's.
+    var pcapEl = player.querySelector(".js-player-cap");
+    var pcap = pcapEl ? captioner(pcapEl) : null;
+    var praf = 0;
+    var pdraw = function () { if (pcap) pcap.render(pv.currentTime, cc.on); };
+    var ptick = function () { pdraw(); praf = pv.paused ? 0 : requestAnimationFrame(ptick); };
+    pv.addEventListener("play", function () { if (!praf) praf = requestAnimationFrame(ptick); });
+    ["pause", "seeked", "timeupdate"].forEach(function (ev) { pv.addEventListener(ev, pdraw); });
+    var pccBtn = player.querySelector(".js-player-cc");
+    if (pccBtn) pccBtn.addEventListener("click", function () { cc.set(!cc.on); pdraw(); });
     document.querySelectorAll(".js-play").forEach(function (btn) {
       var open = function (e) {
         e.stopPropagation();
         if (trailer) { trailer.pause(); }
-        pv.src = btn.getAttribute("data-video");
+        var src = btn.getAttribute("data-video");
+        pv.src = src;
+        // Captions: assets/captions/<clip name>.vtt
+        if (pcap) pcap.load("assets/captions/" + src.split("/").pop().replace(/\.mp4$/, ".vtt")).then(pdraw);
+        cc.set(cc.on);
         pt.textContent = btn.getAttribute("aria-label").replace("Play clip: ", "");
         player.showModal();
         pv.play().catch(function () {});

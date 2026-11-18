@@ -6,8 +6,12 @@ desktop.ini
 .dropbox
 .dropbox.attr
 
-# Editor folders
+# Editor folders and personal Claude Code settings
 .vscode/
+.claude/settings.local.json
 
 # Temporary test pages
 _*test*.html
+
+# Working reference material (rough transcripts); kept local, never published
+_reference/

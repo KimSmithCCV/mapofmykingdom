@@ -255,6 +255,36 @@ p:last-child { margin-bottom: 0; }
 .trailer.is-playing .trailer__play .icon-pause { display: block; }
 .trailer__time { font: 500 14px/1 var(--body); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
 
+/* Closed captions for the trailer. Drawn by JS from assets/captions/trailer.vtt, because the
+   video is cropped at the bottom and the browser's own captions would be cut off. */
+.trailer__ccbtn { margin-left: auto; }
+.cc-btn {
+  min-width: 44px; height: 30px; padding: 0 8px; cursor: pointer;
+  background: none; border: 1.5px solid rgba(242,238,230,.5); border-radius: 4px; color: rgba(242,238,230,.6);
+  font: 700 13px/1 var(--body); letter-spacing: .06em;
+}
+.cc-btn[aria-pressed="true"] { border-color: var(--ivory); color: var(--ivory); box-shadow: inset 0 -3px 0 var(--spotlight); }
+.trailer__cc { display: none; }
+.trailer.has-controls .trailer__cc {
+  display: block; position: absolute; left: var(--pad); right: var(--pad); bottom: 84px; z-index: 1;
+  text-align: center; pointer-events: none;
+}
+/* Caption look (trailer and clip player): heading font, white words, the spoken word in spotlight blue. */
+.cap__who {
+  display: block; margin-bottom: 6px; font: 600 12px/1.2 var(--body); letter-spacing: .16em; text-transform: uppercase;
+  color: var(--mist); text-shadow: 0 1px 6px rgba(0,0,0,.9);
+}
+.cap__line {
+  display: inline-block; max-width: 20em; font-family: var(--display); font-style: italic; font-weight: 800;
+  font-size: clamp(20px, 2.1vw, 32px); line-height: 1.05; text-transform: uppercase; letter-spacing: .01em;
+  color: var(--ivory); text-wrap: balance; text-shadow: 0 2px 12px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.9);
+}
+.cap__w { transition: color .12s ease; }
+.cap__w.is-now { color: var(--spotlight); }
+/* While a caption is on screen, fade the big title out of its way. */
+.trailer__title { transition: opacity .4s ease; }
+.trailer.cc-showing .trailer__title { opacity: 0; }
+
 /* Clips carousel */
 .clips { padding: 112px 0 112px var(--pad); }
 .clips__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; padding-right: var(--pad); margin-bottom: 36px; }
@@ -302,7 +332,7 @@ p:last-child { margin-bottom: 0; }
 .person p { font-size: 16px; }
 
 /* Full-width silent clip */
-.interlude { position: relative; height: max(520px, 56.25vw); overflow: hidden; } /* 16:9, like the video */
+.interlude { position: relative; height: max(480px, 42vw); overflow: hidden; } /* about 3/4 of 16:9; video is pinned to the top, so the bottom gets trimmed */
 .interlude video { object-position: center top; }
 .interlude .shade { background: linear-gradient(180deg, rgba(14,20,28,.55) 0%, rgba(14,20,28,.15) 35%, rgba(14,20,28,.15) 65%, rgba(14,20,28,.6) 100%); }
 
@@ -317,6 +347,17 @@ p:last-child { margin-bottom: 0; }
 .press__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 18px; }
 .press-card { margin: 0; background: var(--slate); padding: 36px; display: flex; flex-direction: column; justify-content: space-between; gap: 28px; }
 .press-card blockquote { margin: 0; font-size: 22px; line-height: 1.45; font-weight: 500; }
+.press__links { margin-top: 64px; }
+.press__links-title {
+  margin: 0 0 18px; font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+}
+.press__links ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr)); column-gap: 64px; border-top: 1px solid var(--steel); }
+.press__links li { border-bottom: 1px solid var(--steel); }
+.press__links a { display: flex; align-items: baseline; gap: 16px; padding: 20px 0; text-decoration: none; }
+.press__outlet { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 26px; line-height: 1.1; text-transform: uppercase; }
+.press__date { margin-left: auto; font-size: 14px; color: var(--mist); white-space: nowrap; }
+.press__arrow { color: var(--spotlight); font-size: 20px; transition: transform .2s ease; }
+.press__links a:hover .press__arrow, .press__links a:focus-visible .press__arrow { transform: translateX(4px); }
 .press-card figcaption { font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--mist); }
 
 /* Guide */
@@ -339,9 +380,37 @@ p:last-child { margin-bottom: 0; }
   display: flex; align-items: center; justify-content: center; font-size: 20px;
 }
 .faq__icon span { display: inline-block; transition: transform .25s ease; }
-.faq details[open] .faq__icon span { transform: rotate(90deg); }
-.faq summary h3 { margin: 0; font: inherit; }
+.faq details[open] > summary .faq__icon span { transform: rotate(90deg); }
+.faq summary h3, .faq summary h4 { margin: 0; font: inherit; }
 .faq__answer { margin: 16px 0 0 68px; }
+.faq__answer p { margin: 0 0 12px; }
+.faq__answer p:last-child { margin-bottom: 0; }
+.faq__answer ul { margin: 0 0 12px; padding-left: 1.2em; }
+.faq__answer ul:last-child { margin-bottom: 0; }
+.faq__answer li { margin-bottom: 4px; }
+.faq__answer li::marker { color: var(--spotlight); }
+/* Each FAQ group is itself expandable (a <details> holding the question <details>). */
+.faq details.faq__group { border-bottom: 0; padding: 0; margin-top: 12px; }
+.faq details.faq__group:first-of-type { margin-top: 18px; }
+.faq .faq__group-summary {
+  display: flex; align-items: center; gap: 16px; padding: 22px 0; font-size: inherit;
+  border-top: 2px solid var(--spotlight);
+}
+.faq summary h3.faq__group-title {
+  margin: 0; font-family: var(--display); font-style: italic; font-weight: 800;
+  font-size: clamp(26px, 2.6vw, 34px); line-height: 1.1; text-transform: uppercase; color: var(--ivory);
+}
+.faq__group-count { font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--mist); white-space: nowrap; }
+.faq__group-icon { margin-left: auto; position: relative; flex: 0 0 auto; width: 22px; height: 22px; }
+.faq__group-icon::before, .faq__group-icon::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; background: var(--spotlight);
+  transition: transform .25s ease;
+}
+.faq__group-icon::after { transform: rotate(90deg); }
+.faq__group[open] > summary .faq__group-icon::after { transform: rotate(0deg); }
+.faq__group-summary:hover .faq__group-title { color: var(--mist); }
+.faq__group .faq__list { margin: 0 0 28px; }
+@media (max-width: 560px) { .faq__group-count { display: none; } }
 @media (max-width: 560px) { .faq__answer { margin-left: 0; } }
 
 /* Closing quote */
@@ -380,8 +449,98 @@ p:last-child { margin-bottom: 0; }
 /* Clip player */
 .clip { cursor: pointer; }
 .player { width: min(1100px, 94vw); max-width: none; padding: 0; border: 0; background: transparent; color: var(--ivory); overflow: visible; }
+.player__frame { position: relative; }
+.player__cap { position: absolute; left: 5%; right: 5%; bottom: 64px; text-align: center; pointer-events: none; }
+.player__bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 14px; }
+.player__bar .player__title { margin: 0; }
+.player__bar .cc-btn { flex: 0 0 auto; }
 .player::backdrop { background: rgba(8,12,18,.92); }
 .player__video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
 .player__title { margin: 14px 0 0; font-family: var(--display); font-size: 26px; text-transform: uppercase; letter-spacing: .01em; }
 .player__close { position: absolute; top: -48px; right: 0; width: 40px; height: 40px; border: 1px solid var(--spotlight); border-radius: 50%; background: transparent; color: var(--ivory); font-size: 24px; line-height: 1; cursor: pointer; }
 .player__close:hover, .player__close:focus-visible { background: var(--steel); }
+
+/* ==========================================================================
+   PHONE LAYOUT (640px and narrower)
+   The same page, re-laid-out for phones. Desktop styles above stay as they are.
+   ========================================================================== */
+@media (max-width: 640px) {
+  html { scroll-padding-top: 72px; } /* anchor links land below the pinned header */
+
+  /* Pinned header: clear over the hero, solid once you scroll (JS adds .is-scrolled) */
+  .site-header { position: fixed; padding: 14px var(--pad); transition: background .25s ease, box-shadow .25s ease; }
+  .site-header.is-scrolled { background: rgba(14,20,28,.95); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: 0 1px 0 var(--slate); }
+  .wordmark { font-size: 22px; }
+  .nav-toggle { padding: 10px 14px; }
+  .site-nav { top: 62px; }
+
+  /* Tighter spacing and type, so there's less scrolling */
+  .section, .show, .guide { padding-top: 64px; padding-bottom: 64px; }
+  .clips { padding-top: 64px; padding-bottom: 64px; }
+  .host__copy { padding: 56px var(--pad); }
+  .host__media { min-height: 300px; }
+  .closing { padding: 96px var(--pad); }
+  .h-display { font-size: 40px; margin-bottom: 24px; }
+  .pull blockquote { font-size: 30px; }
+  .pull--stat blockquote { font-size: 34px; }
+  .closing .pull blockquote { font-size: 38px; }
+  .hero__inner { padding-top: 112px; padding-bottom: 64px; }
+  .hero__copy-extra { display: none; } /* less text over the video on phones */
+  .hero__media { object-position: center top; }
+  .hero__cta { margin-top: 28px; }
+
+  /* Show details: a 2 x 2 grid instead of one long column */
+  .show__details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; }
+  .show__details dd { font-size: 19px; }
+
+  /* Trailer: title above, the full width of the video, controls below.
+     Title row 76px + video 45vw (16:9 with the bottom fifth cropped) + controls 72px. */
+  .trailer { height: calc(76px + 45vw + 72px); background: var(--charcoal); }
+  .trailer video { top: 76px; height: 56.25vw; }
+  .trailer .shade { display: none; }
+  .trailer .trailer__title, .trailer.has-controls .trailer__title {
+    top: 24px; bottom: auto; font-size: 30px; line-height: 1; opacity: 1;
+  }
+  .trailer__title br { display: none; }
+  .trailer .trailer__sound, .trailer.has-controls .trailer__sound {
+    top: 18px; bottom: auto; padding: 10px 12px; min-height: 40px; font-size: 11px; letter-spacing: .12em;
+  }
+  .trailer.has-captions .trailer__blackout { inset: auto 0; top: 76px; height: 45vw; }
+  .trailer.has-captions .trailer__captions { inset: auto var(--pad); top: 76px; height: 45vw; }
+  .trailer__line { font-size: 24px; }
+  .trailer .trailer__countdown { top: 86px; font-size: 11px; }
+  .trailer.has-controls .trailer__cc { bottom: 80px; }
+  .trailer.has-controls .trailer__controls { padding: 8px var(--pad) 6px; background: var(--charcoal); }
+  .cap__line { font-size: 18px; }
+  .cap__who { font-size: 10px; margin-bottom: 4px; }
+
+  /* Writer and star: photo beside the role and name, bio underneath */
+  .people__grid { gap: 40px; }
+  .person { display: grid; grid-template-columns: 112px minmax(0, 1fr); grid-template-rows: 1fr auto auto; gap: 0 18px; }
+  .person img { width: 112px; height: 146px; grid-row: 1 / span 2; }
+  .person__body { display: contents; }
+  .person__role { grid-column: 2; grid-row: 1; align-self: end; margin-bottom: 4px; }
+  .person h3 { grid-column: 2; grid-row: 2; margin: 0; font-size: 32px; }
+  .person p:not(.person__role) { grid-column: 1 / -1; grid-row: 3; margin-top: 18px; }
+
+  /* Silent clip above Host: shorter on a narrow screen */
+  .interlude { height: 360px; }
+
+  /* Press quotes: swipe sideways through the cards */
+  .press__grid {
+    display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+    margin-right: calc(-1 * var(--pad)); padding-right: var(--pad); scrollbar-width: none;
+  }
+  .press__grid::-webkit-scrollbar { display: none; }
+  .press-card { flex: 0 0 84%; scroll-snap-align: start; padding: 28px; }
+  .press-card blockquote { font-size: 19px; }
+  .press__links { margin-top: 48px; }
+  .press__outlet { font-size: 22px; }
+
+  /* Clip player fills the screen width */
+  .player { width: 100vw; }
+  .player__close { right: 12px; }
+  .player__bar { padding: 0 16px; }
+  .player__title { font-size: 20px; }
+  .player__cap { bottom: 48px; }
+}
