@@ -139,7 +139,7 @@ p:last-child { margin-bottom: 0; }
 .hero__lede { margin: 34px 0 0; max-width: 920px; text-wrap: balance; font-size: clamp(20px, 2vw, 26px); line-height: 1.45; font-weight: 500; }
 .hero__copy { margin: 18px 0 0; max-width: 640px; }
 .hero__facts { margin: 22px 0 0; }
-.hero__cta { margin-top: 40px; }
+.hero__cta { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 14px 40px; }
 
 /* Show details */
 .show { padding: 88px var(--pad); }
@@ -151,6 +151,35 @@ p:last-child { margin-bottom: 0; }
 .show__details dd { margin: 0; font-size: 22px; font-weight: 600; }
 .show__details .sub { display: block; margin-top: 2px; font-size: 15px; font-weight: 400; color: var(--mist); }
 .show__cta { grid-column: 1 / -1; margin-top: 8px; align-items: flex-start; } /* underline hugs the text */
+
+.show__host { margin-top: 18px; font-size: 16px; }
+.show__host a { color: var(--mist); text-decoration: none; }
+.show__host a:hover { color: var(--ivory); }
+
+/* Full play (Vimeo, loads on click) */
+.fullplay__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 48px; margin-bottom: 32px; }
+.fullplay__head .h-display { margin-bottom: 0; }
+.fullplay__intro { flex: 0 1 460px; margin: 0; color: var(--ivory); }
+.fullplay__frame { position: relative; aspect-ratio: 16 / 9; background: #000; overflow: hidden; }
+.fullplay__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.fullplay__poster { position: absolute; inset: 0; display: block; color: var(--ivory); text-decoration: none; }
+.fullplay__poster img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.fullplay__poster:hover img { transform: scale(1.02); }
+.fullplay__shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,20,28,0) 45%, rgba(14,20,28,.85) 100%); }
+.fullplay__play {
+  position: absolute; left: 50%; top: 50%; width: 92px; height: 92px; margin: -46px 0 0 -46px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; background: rgba(242,238,230,.94); transition: transform .2s ease;
+}
+.fullplay__poster:hover .fullplay__play, .fullplay__poster:focus-visible .fullplay__play { transform: scale(1.08); }
+.fullplay__meta {
+  position: absolute; left: 32px; bottom: 26px; font-family: var(--display); font-style: italic; font-weight: 800;
+  font-size: clamp(22px, 2.4vw, 34px); text-transform: uppercase; line-height: 1;
+}
+.fullplay__meta span { margin-left: 10px; font: 600 13px/1 var(--body); font-style: normal; letter-spacing: .14em; color: var(--mist); }
+@media (max-width: 640px) {
+  .fullplay__play { width: 68px; height: 68px; margin: -34px 0 0 -34px; }
+  .fullplay__meta { left: 18px; bottom: 16px; font-size: 20px; }
+}
 
 /* Pull quotes */
 .pull { margin: 0 auto; max-width: 1100px; }
@@ -359,6 +388,42 @@ p:last-child { margin-bottom: 0; }
 .press__arrow { color: var(--spotlight); font-size: 20px; transition: transform .2s ease; }
 .press__links a:hover .press__arrow, .press__links a:focus-visible .press__arrow { transform: translateX(4px); }
 .press-card figcaption { font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--mist); }
+
+/* Why Peoples Company sponsors the play */
+.sponsor__grid { display: flex; flex-wrap: wrap; gap: 48px 80px; align-items: flex-start; }
+.sponsor__copy { flex: 3 1 520px; }
+.sponsor__copy p { max-width: 640px; }
+.sponsor__cta { margin-top: 26px; }
+.sponsor__aside { flex: 2 1 340px; display: flex; flex-direction: column; gap: 28px; }
+.sponsor__quote { margin: 0; background: var(--slate); padding: 32px; }
+.sponsor__quote blockquote { margin: 0; font-size: 21px; line-height: 1.45; font-weight: 500; }
+.sponsor__quote figcaption { margin-top: 20px; font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--mist); }
+.sponsor__punch {
+  margin: 0; font-family: var(--display); font-style: italic; font-weight: 800; font-size: clamp(40px, 4.4vw, 60px);
+  line-height: 1; text-transform: uppercase; color: var(--spotlight);
+}
+@media (max-width: 640px) { .sponsor__quote { padding: 24px; } .sponsor__quote blockquote { font-size: 19px; } }
+
+/* The film (coming soon) */
+.film__grid { display: flex; flex-wrap: wrap; gap: 48px 72px; align-items: center; }
+.film__copy { flex: 1 1 440px; }
+.film__copy p { max-width: 560px; }
+.film__cta { margin-top: 26px; }
+/* Card: photo beside role / name / company, bio underneath */
+.film__person {
+  flex: 1 1 400px; background: var(--slate); padding: 40px;
+  display: grid; grid-template-columns: 150px minmax(0, 1fr); grid-template-rows: 1fr auto auto auto; gap: 0 24px;
+}
+.film__photo { grid-column: 1; grid-row: 1 / span 3; width: 150px; height: 195px; object-fit: cover; }
+.film__person .person__role { grid-column: 2; grid-row: 1; align-self: end; margin-bottom: 4px; }
+.film__person h3 { grid-column: 2; grid-row: 2; margin: 0; font-family: var(--display); font-style: italic; font-weight: 800; font-size: 40px; line-height: 1; text-transform: uppercase; }
+.film__company { grid-column: 2; grid-row: 3; margin: 8px 0 0; font-weight: 600; color: var(--mist); }
+.film__person p:last-child { grid-column: 1 / -1; grid-row: 4; margin-top: 24px; font-size: 16px; }
+@media (max-width: 640px) {
+  .film__person { padding: 24px; grid-template-columns: 112px minmax(0, 1fr); gap: 0 18px; }
+  .film__photo { width: 112px; height: 146px; }
+  .film__person h3 { font-size: 30px; }
+}
 
 /* Guide */
 .guide { background: var(--slate); padding: 88px var(--pad); }

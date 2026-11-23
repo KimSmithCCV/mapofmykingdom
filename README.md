@@ -59,11 +59,10 @@ Headings: Barlow Condensed ExtraBold Italic. Body: Figtree 400, 500, 600.
 
 Search the code for `TODO` and `[` to find each one.
 
-- Show time, venue address, ticket price, and ticket link (show band)
-- Captions for the six clips (optional, recommended for accessibility)
-- Social profile URLs (footer)
+- Set up the info@mapofmykingdom.com email inbox. The site's contact, host and film update links all send there, so it has to work before launch
+- Add Map of My Kingdom to the holding company
+- Social profile URLs (footer): Facebook is done (facebook.com/mapofmykingdom); Instagram, LinkedIn, YouTube and X still point nowhere. Add their links, or remove the ones the play doesn't use
 - Copyright line (footer)
-- Stoner Theater address in the TheaterEvent schema, plus `offers` once ticket info is set
 - GA4 / Google Tag Manager snippet (head)
 - Confirm Cora Vanderbroek spelling if her name gets used in any quote credit
 

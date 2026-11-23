@@ -110,6 +110,36 @@
     heroVideo.poster = heroVideo.dataset.posterMobile;
   }
 
+  // Full play: swap the still for the Vimeo player only when someone clicks it.
+  document.querySelectorAll(".js-fullplay").forEach(function (link) {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      var trailerVid = document.querySelector(".js-trailer");
+      if (trailerVid) trailerVid.pause();
+      var frame = document.createElement("iframe");
+      frame.src = "https://player.vimeo.com/video/" + link.getAttribute("data-vimeo") + "?autoplay=1&title=0&byline=0&portrait=0&dnt=1";
+      frame.title = "Map of My Kingdom, full performance";
+      frame.allow = "autoplay; fullscreen; picture-in-picture";
+      frame.setAttribute("allowfullscreen", "");
+      link.parentNode.replaceChild(frame, link);
+      frame.focus();
+    });
+  });
+
+  // Links to an FAQ answer (e.g. #faq-host) open its group and question before scrolling there.
+  var openTarget = function (id) {
+    var target = id && document.getElementById(id);
+    if (!target || !target.closest(".faq")) return false;
+    for (var el = target; el; el = el.parentElement) { if (el.tagName === "DETAILS") el.open = true; }
+    target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    return true;
+  };
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#faq-"]');
+    if (a && openTarget(a.getAttribute("href").slice(1))) { e.preventDefault(); history.replaceState(null, "", a.getAttribute("href")); }
+  });
+  if (location.hash.indexOf("#faq-") === 0) openTarget(location.hash.slice(1));
+
   // Silent background clips: stills only for reduced motion or data saver.
   var ambient = document.querySelectorAll(".js-ambient");
   ambient.forEach(function (v) {

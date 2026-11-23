@@ -15,3 +15,6 @@ _*test*.html
 
 # Working reference material (rough transcripts); kept local, never published
 _reference/
+
+# Leftover temporary files from interrupted saves
+*.tmp.*
