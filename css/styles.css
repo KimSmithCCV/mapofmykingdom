@@ -306,23 +306,20 @@ p:last-child { margin-bottom: 0; }
 .sponsor__copy { flex: 3 1 520px; }
 .sponsor__logo { display: inline-block; align-self: flex-start; margin-top: 8px; }
 .sponsor__logo img { display: block; width: 210px; height: auto; }
+.sponsor__guide { background: var(--slate); padding: 32px; }
+.sponsor__guide h3 { margin: 0 0 14px; font-family: var(--display); font-style: italic; font-weight: 800; font-size: 34px; line-height: 1; text-transform: uppercase; }
+.sponsor__guide p:not(.label) { margin: 0 0 22px; font-size: 16px; }
+.sponsor__guide .link-cta { font-size: 22px; }
 .sponsor__copy p { max-width: 640px; }
 .sponsor__cta { margin-top: 26px; }
 .sponsor__aside { flex: 2 1 340px; display: flex; flex-direction: column; gap: 28px; }
-.sponsor__quote { margin: 0; background: var(--slate); padding: 32px; }
-.sponsor__quote blockquote { margin: 0; font-size: 21px; line-height: 1.45; font-weight: 500; }
-.sponsor__quote figcaption { margin-top: 20px; font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--mist); }
 .sponsor__punch {
   margin: 0; font-family: var(--display); font-style: italic; font-weight: 800; font-size: clamp(40px, 4.4vw, 60px);
   line-height: 1; text-transform: uppercase; color: var(--spotlight);
 }
-@media (max-width: 640px) { .sponsor__quote { padding: 24px; } .sponsor__quote blockquote { font-size: 19px; } }
+@media (max-width: 640px) { .sponsor__guide { padding: 24px; } .sponsor__guide h3 { font-size: 28px; } }
 
 /* Guide */
-.guide { background: var(--slate); padding: 88px var(--pad); }
-.guide__grid { display: flex; flex-wrap: wrap; gap: 32px 72px; align-items: center; justify-content: space-between; }
-.guide__copy { flex: 1 1 520px; }
-.guide .h-display { font-size: clamp(40px, 4.4vw, 60px); }
 
 /* FAQ */
 .faq .container { max-width: 1000px; }
@@ -510,7 +507,7 @@ p:last-child { margin-bottom: 0; }
   .site-nav { top: 62px; }
 
   /* Tighter spacing and type, so there's less scrolling */
-  .section, .show, .guide { padding-top: 64px; padding-bottom: 64px; }
+  .section, .show { padding-top: 64px; padding-bottom: 64px; }
   .clips { padding-top: 64px; padding-bottom: 64px; }
   .host__copy { padding: 56px var(--pad); }
   .host__media { min-height: 300px; }
