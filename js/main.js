@@ -5,7 +5,7 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var saveData = navigator.connection && navigator.connection.saveData;
 
-  // ---- Captions (shared by the trailer and the clip player) ----
+  // ---- Captions (used by the video player) ----
   // Caption files (assets/captions/*.vtt) are WebVTT with a timestamp before each word
   // (<00:00:01.230>word) and a speaker tag (<v Mary Swander>) where a new person starts talking.
   function vttTime(s) { var p = s.split(":"); return (+p[0]) * 3600 + (+p[1]) * 60 + parseFloat(p[2]); }
@@ -114,8 +114,6 @@
   document.querySelectorAll(".js-fullplay").forEach(function (link) {
     link.addEventListener("click", function (e) {
       e.preventDefault();
-      var trailerVid = document.querySelector(".js-trailer");
-      if (trailerVid) trailerVid.pause();
       var frame = document.createElement("iframe");
       frame.src = "https://player.vimeo.com/video/" + link.getAttribute("data-vimeo") + "?autoplay=1&title=0&byline=0&portrait=0&dnt=1";
       frame.title = "Map of My Kingdom, full performance";
@@ -157,29 +155,64 @@
     }
   });
 
-  // Trailer: plays muted as it scrolls into view; tap for sound.
-  var trailer = document.querySelector(".js-trailer");
-  var soundBtn = document.querySelector(".js-trailer-sound");
-  if (trailer) {
-    var userPaused = false; // once a viewer pauses, don't auto-resume on scroll
-    if (!reduceMotion && "IntersectionObserver" in window) {
-      new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          if (en.isIntersecting) { if (!userPaused) trailer.play().catch(function () {}); } else { trailer.pause(); }
-        });
-      }, { threshold: 0.35 }).observe(trailer);
-    }
-    if (soundBtn) {
-      soundBtn.addEventListener("click", function () {
-        var on = trailer.muted;
-        trailer.muted = !on;
-        if (on) { trailer.loop = false; trailer.currentTime = 0; }
-        userPaused = false;
-        trailer.play().catch(function () {});
-        soundBtn.setAttribute("aria-pressed", on ? "true" : "false");
-        soundBtn.querySelector("span").textContent = on ? "Sound on" : "Tap for sound";
+  // Clips carousel
+  var track = document.querySelector(".js-clips");
+  if (track) {
+    var slides = track.querySelectorAll(".clip");
+    var dotsWrap = document.querySelector(".js-clip-dots");
+    var counter = document.querySelector(".js-clip-current");
+    var idx = 0;
+    var dots = [];
+    slides.forEach(function (s, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("aria-label", "Go to clip " + (i + 1));
+      b.addEventListener("click", function () { go(i); });
+      dotsWrap.appendChild(b);
+      dots.push(b);
+    });
+    function go(i) {
+      idx = (i + slides.length) % slides.length;
+      var step = slides[0].getBoundingClientRect().width + 16;
+      track.style.transform = "translateX(" + (-idx * step) + "px)";
+      slides.forEach(function (s, j) { s.classList.toggle("is-active", j === idx); });
+      dots.forEach(function (d, j) {
+        d.classList.toggle("is-done", j <= idx);
+        if (j === idx) { d.setAttribute("aria-current", "true"); } else { d.removeAttribute("aria-current"); }
       });
+      counter.textContent = (idx + 1 < 10 ? "0" : "") + (idx + 1);
     }
+    document.querySelector(".js-clip-prev").addEventListener("click", function () { go(idx - 1); });
+    document.querySelector(".js-clip-next").addEventListener("click", function () { go(idx + 1); });
+    // Swipe on touch screens
+    var startX = null;
+    track.addEventListener("touchstart", function (e) { startX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener("touchend", function (e) {
+      if (startX === null) { return; }
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) { go(idx + (dx < 0 ? 1 : -1)); }
+      startX = null;
+    });
+    window.addEventListener("resize", function () { go(idx); });
+    go(0);
+  }
+  // Trailer pop-up: the hero play button opens it and plays from the start with sound.
+  var trailer = document.querySelector(".js-trailer");
+  var trailerDialog = document.querySelector(".js-trailer-dialog");
+  if (trailer && trailerDialog && trailerDialog.showModal) {
+    var userPaused = false;
+    var closeTrailer = function () { trailer.pause(); if (trailerDialog.open) trailerDialog.close(); };
+    document.querySelectorAll(".js-trailer-open").forEach(function (b) {
+      b.addEventListener("click", function () {
+        trailerDialog.showModal();
+        trailer.muted = false;
+        try { trailer.currentTime = 0; } catch (err) {}
+        trailer.play().catch(function () {});
+      });
+    });
+    trailerDialog.querySelector(".js-trailer-close").addEventListener("click", closeTrailer);
+    trailerDialog.addEventListener("close", function () { trailer.pause(); });
+    trailerDialog.addEventListener("click", function (e) { if (e.target === trailerDialog) closeTrailer(); });
 
     // Everything that follows playback (captions, countdown, progress bar) runs on one animation loop.
     var box = trailer.closest(".trailer");
@@ -361,54 +394,13 @@
     }
   }
 
-  // Clips carousel
-  var track = document.querySelector(".js-clips");
-  if (track) {
-    var slides = track.querySelectorAll(".clip");
-    var dotsWrap = document.querySelector(".js-clip-dots");
-    var counter = document.querySelector(".js-clip-current");
-    var idx = 0;
-    var dots = [];
-    slides.forEach(function (s, i) {
-      var b = document.createElement("button");
-      b.type = "button";
-      b.setAttribute("aria-label", "Go to clip " + (i + 1));
-      b.addEventListener("click", function () { go(i); });
-      dotsWrap.appendChild(b);
-      dots.push(b);
-    });
-    function go(i) {
-      idx = (i + slides.length) % slides.length;
-      var step = slides[0].getBoundingClientRect().width + 16;
-      track.style.transform = "translateX(" + (-idx * step) + "px)";
-      slides.forEach(function (s, j) { s.classList.toggle("is-active", j === idx); });
-      dots.forEach(function (d, j) {
-        d.classList.toggle("is-done", j <= idx);
-        if (j === idx) { d.setAttribute("aria-current", "true"); } else { d.removeAttribute("aria-current"); }
-      });
-      counter.textContent = (idx + 1 < 10 ? "0" : "") + (idx + 1);
-    }
-    document.querySelector(".js-clip-prev").addEventListener("click", function () { go(idx - 1); });
-    document.querySelector(".js-clip-next").addEventListener("click", function () { go(idx + 1); });
-    // Swipe on touch screens
-    var startX = null;
-    track.addEventListener("touchstart", function (e) { startX = e.touches[0].clientX; }, { passive: true });
-    track.addEventListener("touchend", function (e) {
-      if (startX === null) { return; }
-      var dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 40) { go(idx + (dx < 0 ? 1 : -1)); }
-      startX = null;
-    });
-    window.addEventListener("resize", function () { go(idx); });
-    go(0);
-  }
-  // Clip player
+  // Clip player pop-up for the six clips.
   var player = document.getElementById("player");
   if (player && player.showModal) {
     var pv = player.querySelector("video");
     var pt = player.querySelector(".player__title");
     function closePlayer() { pv.pause(); pv.removeAttribute("src"); pv.load(); if (player.open) { player.close(); } }
-    // Captions over the clip, drawn the same way as the trailer's.
+    // Captions over the video, drawn by captioner() above.
     var pcapEl = player.querySelector(".js-player-cap");
     var pcap = pcapEl ? captioner(pcapEl) : null;
     var praf = 0;
@@ -421,13 +413,12 @@
     document.querySelectorAll(".js-play").forEach(function (btn) {
       var open = function (e) {
         e.stopPropagation();
-        if (trailer) { trailer.pause(); }
         var src = btn.getAttribute("data-video");
         pv.src = src;
         // Captions: assets/captions/<clip name>.vtt
         if (pcap) pcap.load("assets/captions/" + src.split("/").pop().replace(/\.mp4$/, ".vtt")).then(pdraw);
         cc.set(cc.on);
-        pt.textContent = btn.getAttribute("aria-label").replace("Play clip: ", "");
+        pt.textContent = btn.getAttribute("data-title") || btn.getAttribute("aria-label").replace("Play clip: ", "");
         player.showModal();
         pv.play().catch(function () {});
       };

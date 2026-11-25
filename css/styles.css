@@ -139,7 +139,7 @@ p:last-child { margin-bottom: 0; }
 .hero__lede { margin: 34px 0 0; max-width: 920px; text-wrap: balance; font-size: clamp(20px, 2vw, 26px); line-height: 1.45; font-weight: 500; }
 .hero__copy { margin: 18px 0 0; max-width: 640px; }
 .hero__facts { margin: 22px 0 0; }
-.hero__cta { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 14px 40px; }
+.hero__cta { margin-top: 40px; display: flex; flex-wrap: wrap; align-items: center; gap: 18px 40px; }
 
 /* Show details */
 .show { padding: 88px var(--pad); }
@@ -160,6 +160,9 @@ p:last-child { margin-bottom: 0; }
 .fullplay__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 48px; margin-bottom: 32px; }
 .fullplay__head .h-display { margin-bottom: 0; }
 .fullplay__intro { flex: 0 1 460px; margin: 0; color: var(--ivory); }
+.fullplay__intro p { margin: 0; }
+.fullplay__trailer { margin-top: 18px; padding: 0; background: none; border: 0; color: var(--ivory); cursor: pointer; font-size: 22px; }
+.fullplay__trailer:hover, .fullplay__trailer:focus-visible { color: var(--mist); }
 .fullplay__frame { position: relative; aspect-ratio: 16 / 9; background: #000; overflow: hidden; }
 .fullplay__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .fullplay__poster { position: absolute; inset: 0; display: block; color: var(--ivory); text-decoration: none; }
@@ -198,107 +201,14 @@ p:last-child { margin-bottom: 0; }
 .about__media img { width: 100%; height: 100%; object-fit: cover; }
 .about__copy { flex: 1 1 400px; }
 
-/* Trailer */
-/* The video is drawn 125% as tall as the box and pinned to the top, so the bottom 20% of the frame
-   (burned-in subtitles and name captions) is always cropped off. On desktop the box is 45vw tall,
-   which makes the video exactly 16:9 at full width: nothing cut from the sides or top. */
-.trailer { position: relative; height: max(520px, 45vw); overflow: hidden; }
-.trailer video { position: absolute; top: 0; left: 0; width: 100%; height: 125%; object-fit: cover; object-position: center top; }
-.trailer .shade { background: linear-gradient(180deg, rgba(14,20,28,.15) 0%, rgba(14,20,28,.7) 100%); pointer-events: none; }
-.trailer__title {
-  position: absolute; left: var(--pad); bottom: 56px; margin: 0; pointer-events: none;
-  font-family: var(--display); font-style: italic; font-weight: 800; font-size: clamp(56px, 7vw, 104px);
-  line-height: .86; text-transform: uppercase;
-}
-.trailer__sound {
-  position: absolute; right: var(--pad); bottom: 56px; display: inline-flex; align-items: center; gap: 10px;
-  background: rgba(14,20,28,.55); border: 1.5px solid var(--ivory); color: var(--ivory); cursor: pointer;
-  font: 600 13px/1 var(--body); letter-spacing: .16em; text-transform: uppercase; padding: 14px 18px; min-height: 44px;
-}
-.trailer__sound:hover { background: var(--steel); }
-
-/* Opening captions: the trailer starts with ~19s of black and small burned-in subtitles.
-   JS covers them with black and shows each line in the heading font, lighting up word by word. */
-.trailer__blackout, .trailer__captions { display: none; }
-.trailer.has-captions .trailer__blackout {
-  display: block; position: absolute; inset: 0; background: #000; opacity: 0; transition: opacity .5s ease; pointer-events: none;
-}
-.trailer.has-captions.is-intro .trailer__blackout { opacity: 1; }
-.trailer__countdown {
-  display: none; position: absolute; top: 28px; left: var(--pad); margin: 0; pointer-events: none;
-  font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
-  font-variant-numeric: tabular-nums;
-}
-.trailer.has-captions.is-intro .trailer__countdown { display: block; }
-@media (max-width: 640px) { .trailer__countdown { top: 82px; } } /* below the sound button */
-.trailer.has-captions .trailer__captions {
-  display: flex; position: absolute; inset: 0 var(--pad) 22%; align-items: center; justify-content: center;
-  pointer-events: none; text-align: center;
-}
-.trailer__line {
-  margin: 0; max-width: 15em; font-family: var(--display); font-style: italic; font-weight: 800;
-  font-size: clamp(34px, 5vw, 84px); line-height: 1; text-transform: uppercase; text-wrap: balance;
-  opacity: 0; transform: translateY(14px); transition: opacity .35s ease, transform .35s ease;
-}
-.trailer__line.is-on { opacity: 1; transform: none; }
-.trailer__word { color: rgba(242,238,230,.28); transition: color .18s ease; }
-.trailer__word.is-said { color: var(--ivory); }
-.trailer__word.is-now { color: var(--ivory); text-decoration: underline; text-decoration-color: var(--spotlight);
-  text-decoration-thickness: .09em; text-underline-offset: .12em; }
-
-/* YouTube-style controls (shown only when JS runs; otherwise nothing changes). */
-.trailer__controls { display: none; }
-.trailer.has-controls .trailer__controls {
-  display: block; position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
-  padding: 24px var(--pad) 8px; background: linear-gradient(180deg, transparent, rgba(0,0,0,.55));
-}
-.trailer.has-controls video { cursor: pointer; }
-.trailer.has-controls .trailer__title, .trailer.has-controls .trailer__sound { bottom: 100px; }
-.trailer__seek { position: relative; height: 20px; display: flex; align-items: center; cursor: pointer; touch-action: none; }
-.trailer__rail { position: relative; width: 100%; height: 4px; overflow: hidden; background: rgba(242,238,230,.25); transition: height .12s ease; }
-.trailer__buffer, .trailer__fill { position: absolute; inset: 0; transform-origin: left center; transform: scaleX(0); }
-.trailer__buffer { background: rgba(242,238,230,.35); }
-.trailer__fill { background: var(--spotlight); }
-.trailer__knob {
-  position: absolute; top: 50%; left: 0; width: 15px; height: 15px; border-radius: 50%; background: var(--spotlight);
-  transform: translate(-50%, -50%) scale(0); transition: transform .12s ease; pointer-events: none;
-}
-.trailer__hovertime {
-  position: absolute; bottom: 24px; left: 0; transform: translateX(-50%); padding: 5px 9px; pointer-events: none;
-  background: rgba(14,20,28,.9); font: 600 13px/1 var(--body); font-variant-numeric: tabular-nums; opacity: 0; transition: opacity .12s ease;
-}
-.trailer__seek:hover .trailer__rail, .trailer__seek:focus-visible .trailer__rail, .is-scrubbing .trailer__rail { height: 7px; }
-.trailer__seek:hover .trailer__knob, .trailer__seek:focus-visible .trailer__knob, .is-scrubbing .trailer__knob { transform: translate(-50%, -50%) scale(1); }
-.trailer__seek:hover .trailer__hovertime, .is-scrubbing .trailer__hovertime { opacity: 1; }
-@media (hover: none) { /* touch: keep the handle visible and the bar easy to grab */
-  .trailer__rail { height: 5px; }
-  .trailer__knob { transform: translate(-50%, -50%) scale(1); }
-}
-.trailer__row { display: flex; align-items: center; gap: 10px; height: 40px; }
-.trailer__play {
-  display: grid; place-items: center; width: 40px; height: 40px; margin-left: -9px; padding: 0;
-  background: none; border: 0; color: var(--ivory); cursor: pointer;
-}
-.trailer__play:hover { color: var(--mist); }
-.trailer__play .icon-pause, .trailer.is-playing .trailer__play .icon-play { display: none; }
-.trailer.is-playing .trailer__play .icon-pause { display: block; }
-.trailer__time { font: 500 14px/1 var(--body); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
-
-/* Closed captions for the trailer. Drawn by JS from assets/captions/trailer.vtt, because the
-   video is cropped at the bottom and the browser's own captions would be cut off. */
-.trailer__ccbtn { margin-left: auto; }
+/* Captions (CC) button in the video player */
 .cc-btn {
   min-width: 44px; height: 30px; padding: 0 8px; cursor: pointer;
   background: none; border: 1.5px solid rgba(242,238,230,.5); border-radius: 4px; color: rgba(242,238,230,.6);
   font: 700 13px/1 var(--body); letter-spacing: .06em;
 }
 .cc-btn[aria-pressed="true"] { border-color: var(--ivory); color: var(--ivory); box-shadow: inset 0 -3px 0 var(--spotlight); }
-.trailer__cc { display: none; }
-.trailer.has-controls .trailer__cc {
-  display: block; position: absolute; left: var(--pad); right: var(--pad); bottom: 84px; z-index: 1;
-  text-align: center; pointer-events: none;
-}
-/* Caption look (trailer and clip player): heading font, white words, the spoken word in spotlight blue. */
+/* Caption look (video player): heading font, white words, the spoken word in spotlight blue. */
 .cap__who {
   display: block; margin-bottom: 6px; font: 600 12px/1.2 var(--body); letter-spacing: .16em; text-transform: uppercase;
   color: var(--mist); text-shadow: 0 1px 6px rgba(0,0,0,.9);
@@ -310,9 +220,6 @@ p:last-child { margin-bottom: 0; }
 }
 .cap__w { transition: color .12s ease; }
 .cap__w.is-now { color: var(--spotlight); }
-/* While a caption is on screen, fade the big title out of its way. */
-.trailer__title { transition: opacity .4s ease; }
-.trailer.cc-showing .trailer__title { opacity: 0; }
 
 /* Clips carousel */
 .clips { padding: 112px 0 112px var(--pad); }
@@ -352,6 +259,11 @@ p:last-child { margin-bottom: 0; }
 .round-btn:hover { background: var(--steel); }
 
 /* People */
+.people__head { display: flex; flex-wrap: wrap; gap: 32px 72px; align-items: flex-end; justify-content: space-between; margin-bottom: 40px; }
+.people__head .h-display { margin-bottom: 0; }
+.people__intro { flex: 0 1 560px; }
+.people__intro p { margin: 0; }
+.people__intro .people__cta { margin-top: 20px; }
 .people__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 56px; margin-top: 18px; }
 .person { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
 .person img { width: 200px; height: 260px; object-fit: cover; }
@@ -392,6 +304,8 @@ p:last-child { margin-bottom: 0; }
 /* Why Peoples Company sponsors the play */
 .sponsor__grid { display: flex; flex-wrap: wrap; gap: 48px 80px; align-items: flex-start; }
 .sponsor__copy { flex: 3 1 520px; }
+.sponsor__logo { display: inline-block; align-self: flex-start; margin-top: 8px; }
+.sponsor__logo img { display: block; width: 210px; height: auto; }
 .sponsor__copy p { max-width: 640px; }
 .sponsor__cta { margin-top: 26px; }
 .sponsor__aside { flex: 2 1 340px; display: flex; flex-direction: column; gap: 28px; }
@@ -403,27 +317,6 @@ p:last-child { margin-bottom: 0; }
   line-height: 1; text-transform: uppercase; color: var(--spotlight);
 }
 @media (max-width: 640px) { .sponsor__quote { padding: 24px; } .sponsor__quote blockquote { font-size: 19px; } }
-
-/* The film (coming soon) */
-.film__grid { display: flex; flex-wrap: wrap; gap: 48px 72px; align-items: center; }
-.film__copy { flex: 1 1 440px; }
-.film__copy p { max-width: 560px; }
-.film__cta { margin-top: 26px; }
-/* Card: photo beside role / name / company, bio underneath */
-.film__person {
-  flex: 1 1 400px; background: var(--slate); padding: 40px;
-  display: grid; grid-template-columns: 150px minmax(0, 1fr); grid-template-rows: 1fr auto auto auto; gap: 0 24px;
-}
-.film__photo { grid-column: 1; grid-row: 1 / span 3; width: 150px; height: 195px; object-fit: cover; }
-.film__person .person__role { grid-column: 2; grid-row: 1; align-self: end; margin-bottom: 4px; }
-.film__person h3 { grid-column: 2; grid-row: 2; margin: 0; font-family: var(--display); font-style: italic; font-weight: 800; font-size: 40px; line-height: 1; text-transform: uppercase; }
-.film__company { grid-column: 2; grid-row: 3; margin: 8px 0 0; font-weight: 600; color: var(--mist); }
-.film__person p:last-child { grid-column: 1 / -1; grid-row: 4; margin-top: 24px; font-size: 16px; }
-@media (max-width: 640px) {
-  .film__person { padding: 24px; grid-template-columns: 112px minmax(0, 1fr); gap: 0 18px; }
-  .film__photo { width: 112px; height: 146px; }
-  .film__person h3 { font-size: 30px; }
-}
 
 /* Guide */
 .guide { background: var(--slate); padding: 88px var(--pad); }
@@ -504,14 +397,13 @@ p:last-child { margin-bottom: 0; }
   .section { padding: 88px var(--pad); }
   .hero { min-height: 760px; }
   .hero h1 { font-size: calc((100vw - 2 * var(--pad)) / 7.25); } /* fill the width on phones */
-  .trailer, .interlude { height: 520px; }
-  .trailer__sound, .trailer.has-controls .trailer__sound { top: 20px; bottom: auto; right: var(--pad); }
+  .interlude { height: 520px; }
   .show__details { grid-template-columns: minmax(0, 1fr); }
   .clip { flex-basis: 86vw; }
   .person img { width: 150px; height: 195px; }
 }
 
-/* Clip player */
+/* Video pop-ups (clips; the trailer adds its own rules below) */
 .clip { cursor: pointer; }
 .player { width: min(1100px, 94vw); max-width: none; padding: 0; border: 0; background: transparent; color: var(--ivory); overflow: visible; }
 .player__frame { position: relative; }
@@ -524,6 +416,84 @@ p:last-child { margin-bottom: 0; }
 .player__title { margin: 14px 0 0; font-family: var(--display); font-size: 26px; text-transform: uppercase; letter-spacing: .01em; }
 .player__close { position: absolute; top: -48px; right: 0; width: 40px; height: 40px; border: 1px solid var(--spotlight); border-radius: 50%; background: transparent; color: var(--ivory); font-size: 24px; line-height: 1; cursor: pointer; }
 .player__close:hover, .player__close:focus-visible { background: var(--steel); }
+
+/* Trailer pop-up: the hero play button opens this. The video is drawn 125% as tall as the box and
+   pinned to the top, so the bottom 20% of the frame (burned-in subtitles and name titles) is cropped off. */
+.player--trailer { width: min(1200px, 94vw); }
+.trailer { position: relative; aspect-ratio: 16 / 7.2; overflow: hidden; background: #000; }
+.trailer video { position: absolute; top: 0; left: 0; width: 100%; height: 125%; object-fit: cover; object-position: center top; }
+/* Opening captions: the trailer starts with ~19s of black and small burned-in subtitles.
+   JS covers them with black and shows each line in the heading font, lighting up word by word. */
+.trailer__blackout, .trailer__captions { display: none; }
+.trailer.has-captions .trailer__blackout {
+  display: block; position: absolute; inset: 0; background: #000; opacity: 0; transition: opacity .5s ease; pointer-events: none;
+}
+.trailer.has-captions.is-intro .trailer__blackout { opacity: 1; }
+.trailer__countdown {
+  display: none; position: absolute; top: 28px; left: var(--pad); margin: 0; pointer-events: none;
+  font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--mist);
+  font-variant-numeric: tabular-nums;
+}
+.trailer.has-captions.is-intro .trailer__countdown { display: block; }
+.trailer.has-captions .trailer__captions {
+  display: flex; position: absolute; inset: 0 var(--pad) 22%; align-items: center; justify-content: center;
+  pointer-events: none; text-align: center;
+}
+.trailer__line {
+  margin: 0; max-width: 15em; font-family: var(--display); font-style: italic; font-weight: 800;
+  font-size: clamp(34px, 5vw, 84px); line-height: 1; text-transform: uppercase; text-wrap: balance;
+  opacity: 0; transform: translateY(14px); transition: opacity .35s ease, transform .35s ease;
+}
+.trailer__line.is-on { opacity: 1; transform: none; }
+.trailer__word { color: rgba(242,238,230,.28); transition: color .18s ease; }
+.trailer__word.is-said { color: var(--ivory); }
+.trailer__word.is-now { color: var(--ivory); text-decoration: underline; text-decoration-color: var(--spotlight);
+  text-decoration-thickness: .09em; text-underline-offset: .12em; }
+
+/* YouTube-style controls (shown only when JS runs; otherwise nothing changes). */
+.trailer__controls { display: none; }
+.trailer.has-controls .trailer__controls {
+  display: block; position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  padding: 24px var(--pad) 8px; background: linear-gradient(180deg, transparent, rgba(0,0,0,.55));
+}
+.trailer.has-controls video { cursor: pointer; }
+.trailer__seek { position: relative; height: 20px; display: flex; align-items: center; cursor: pointer; touch-action: none; }
+.trailer__rail { position: relative; width: 100%; height: 4px; overflow: hidden; background: rgba(242,238,230,.25); transition: height .12s ease; }
+.trailer__buffer, .trailer__fill { position: absolute; inset: 0; transform-origin: left center; transform: scaleX(0); }
+.trailer__buffer { background: rgba(242,238,230,.35); }
+.trailer__fill { background: var(--spotlight); }
+.trailer__knob {
+  position: absolute; top: 50%; left: 0; width: 15px; height: 15px; border-radius: 50%; background: var(--spotlight);
+  transform: translate(-50%, -50%) scale(0); transition: transform .12s ease; pointer-events: none;
+}
+.trailer__hovertime {
+  position: absolute; bottom: 24px; left: 0; transform: translateX(-50%); padding: 5px 9px; pointer-events: none;
+  background: rgba(14,20,28,.9); font: 600 13px/1 var(--body); font-variant-numeric: tabular-nums; opacity: 0; transition: opacity .12s ease;
+}
+.trailer__seek:hover .trailer__rail, .trailer__seek:focus-visible .trailer__rail, .is-scrubbing .trailer__rail { height: 7px; }
+.trailer__seek:hover .trailer__knob, .trailer__seek:focus-visible .trailer__knob, .is-scrubbing .trailer__knob { transform: translate(-50%, -50%) scale(1); }
+.trailer__seek:hover .trailer__hovertime, .is-scrubbing .trailer__hovertime { opacity: 1; }
+@media (hover: none) { /* touch: keep the handle visible and the bar easy to grab */
+  .trailer__rail { height: 5px; }
+  .trailer__knob { transform: translate(-50%, -50%) scale(1); }
+}
+.trailer__row { display: flex; align-items: center; gap: 10px; height: 40px; }
+.trailer__play {
+  display: grid; place-items: center; width: 40px; height: 40px; margin-left: -9px; padding: 0;
+  background: none; border: 0; color: var(--ivory); cursor: pointer;
+}
+.trailer__play:hover { color: var(--mist); }
+.trailer__play .icon-pause, .trailer.is-playing .trailer__play .icon-play { display: none; }
+.trailer.is-playing .trailer__play .icon-pause { display: block; }
+.trailer__time { font: 500 14px/1 var(--body); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.trailer__countdown { top: 22px; }
+.trailer__line { font-size: clamp(28px, 4vw, 64px); }
+.trailer__ccbtn { margin-left: auto; }
+.trailer__cc { display: none; }
+.trailer.has-controls .trailer__cc {
+  display: block; position: absolute; left: var(--pad); right: var(--pad); bottom: 84px; z-index: 1;
+  text-align: center; pointer-events: none;
+}
 
 /* ==========================================================================
    PHONE LAYOUT (640px and narrower)
@@ -550,36 +520,16 @@ p:last-child { margin-bottom: 0; }
   .pull--stat blockquote { font-size: 34px; }
   .closing .pull blockquote { font-size: 38px; }
   .hero__inner { padding-top: 112px; padding-bottom: 64px; }
-  .hero__copy-extra { display: none; } /* less text over the video on phones */
   .hero__media { object-position: center top; }
   .hero__cta { margin-top: 28px; }
 
   /* Show details: a 2 x 2 grid instead of one long column */
   .show__details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; }
   .show__details dd { font-size: 19px; }
-
-  /* Trailer: title above, the full width of the video, controls below.
-     Title row 76px + video 45vw (16:9 with the bottom fifth cropped) + controls 72px. */
-  .trailer { height: calc(76px + 45vw + 72px); background: var(--charcoal); }
-  .trailer video { top: 76px; height: 56.25vw; }
-  .trailer .shade { display: none; }
-  .trailer .trailer__title, .trailer.has-controls .trailer__title {
-    top: 24px; bottom: auto; font-size: 30px; line-height: 1; opacity: 1;
-  }
-  .trailer__title br { display: none; }
-  .trailer .trailer__sound, .trailer.has-controls .trailer__sound {
-    top: 18px; bottom: auto; padding: 10px 12px; min-height: 40px; font-size: 11px; letter-spacing: .12em;
-  }
-  .trailer.has-captions .trailer__blackout { inset: auto 0; top: 76px; height: 45vw; }
-  .trailer.has-captions .trailer__captions { inset: auto var(--pad); top: 76px; height: 45vw; }
-  .trailer__line { font-size: 24px; }
-  .trailer .trailer__countdown { top: 86px; font-size: 11px; }
-  .trailer.has-controls .trailer__cc { bottom: 80px; }
-  .trailer.has-controls .trailer__controls { padding: 8px var(--pad) 6px; background: var(--charcoal); }
   .cap__line { font-size: 18px; }
   .cap__who { font-size: 10px; margin-bottom: 4px; }
 
-  /* Writer and star: photo beside the role and name, bio underneath */
+  /* Playwright and screenwriter: photo beside the role and name, bio underneath */
   .people__grid { gap: 40px; }
   .person { display: grid; grid-template-columns: 112px minmax(0, 1fr); grid-template-rows: 1fr auto auto; gap: 0 18px; }
   .person img { width: 112px; height: 146px; grid-row: 1 / span 2; }
@@ -602,10 +552,20 @@ p:last-child { margin-bottom: 0; }
   .press__links { margin-top: 48px; }
   .press__outlet { font-size: 22px; }
 
-  /* Clip player fills the screen width */
+  /* Video pop-ups fill the screen width */
   .player { width: 100vw; }
   .player__close { right: 12px; }
   .player__bar { padding: 0 16px; }
   .player__title { font-size: 20px; }
   .player__cap { bottom: 48px; }
+  /* Trailer pop-up on phones: full-width video, controls in a bar underneath */
+  .player--trailer { width: 100vw; }
+  .trailer { aspect-ratio: auto; height: calc(45vw + 72px); background: var(--charcoal); }
+  .trailer video { height: 56.25vw; }
+  .trailer.has-captions .trailer__blackout { inset: 0 0 auto; height: 45vw; }
+  .trailer.has-captions .trailer__captions { inset: 0 var(--pad) auto; height: 45vw; }
+  .trailer__line { font-size: 22px; }
+  .trailer .trailer__countdown { top: 10px; font-size: 11px; }
+  .trailer.has-controls .trailer__cc { bottom: 80px; }
+  .trailer.has-controls .trailer__controls { padding: 8px var(--pad) 6px; background: var(--charcoal); }
 }

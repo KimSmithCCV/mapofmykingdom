@@ -70,10 +70,11 @@
     },
     {
       "@type": "Person",
-      "@id": "https://mapofmykingdom.com/#erika-kuhn",
-      "name": "Erika Kuhn",
-      "jobTitle": "Actor",
-      "image": "https://mapofmykingdom.com/assets/img/erika-kuhn.jpg"
+      "@id": "https://mapofmykingdom.com/#colleen-bradford-krantz",
+      "name": "Colleen Bradford Krantz",
+      "jobTitle": "Screenwriter",
+      "worksFor": { "@type": "Organization", "name": "Pink Spear Productions" },
+      "image": "https://mapofmykingdom.com/assets/img/colleen-krantz.jpg"
     },
     {
       "@type": "CreativeWork",
@@ -158,7 +159,7 @@
   <nav class="site-nav" id="site-nav" aria-label="Main">
     <ul>
       <li><a href="#the-play">The Play</a></li>
-      <li><a href="#watch">Watch</a></li>
+      <li><a href="#full-play">Watch</a></li>
       <li><a href="#shows">Shows</a></li>
       <li><a href="#host">Host</a></li>
       <li><a href="#press">Press</a></li>
@@ -183,9 +184,12 @@
     <p class="label">A one-woman play by Mary Swander</p>
     <h1 id="hero-title">Map of My Kingdom</h1>
     <p class="hero__lede">Who will inherit the land, and how will it impact your family?</p>
-    <p class="hero__copy">Drawn from real stories of Midwest farm families, Map of My Kingdom follows lawyer and mediator Angela Martin through the hardest question a family can face: who gets the farm?<span class="hero__copy-extra"> The play has toured the country since 2014.</span></p>
+    <p class="hero__copy">Drawn from real stories of Midwest farm families, Map of My Kingdom follows lawyer and mediator Angela Martin through the hardest question a family can face: who gets the farm?</p>
     <p class="label hero__facts">One actor · Under an hour · Followed by an open discussion</p>
-    <div class="hero__cta"><a class="link-cta link-cta--plain" href="#watch">Watch the trailer →</a><a class="link-cta link-cta--plain" href="#full-play">Watch the full play →</a><a class="link-cta link-cta--plain" href="#film">The film adaptation →</a></div>
+    <div class="hero__cta">
+      <a class="link-cta link-cta--plain" href="#full-play">Watch the full play →</a>
+      <a class="link-cta link-cta--plain" href="#film">The film adaptation →</a>
+    </div>
   </div>
 </section>
 
@@ -229,64 +233,6 @@
   </div>
 </section>
 
-<section class="trailer" id="watch" aria-labelledby="trailer-title">
-  <video class="js-trailer" muted loop playsinline preload="none" poster="assets/img/trailer-poster.jpg" aria-label="Map of My Kingdom trailer">
-    <source src="assets/video/trailer.mp4" type="video/mp4">
-    <track kind="captions" srclang="en" label="English" src="assets/captions/trailer.vtt" default>
-  </video>
-  <div class="shade grain"></div>
-  <div class="trailer__blackout"></div>
-  <div class="trailer__captions" aria-hidden="true"><p class="trailer__line js-trailer-line"></p></div>
-  <p class="trailer__countdown js-trailer-countdown" aria-hidden="true"></p>
-  <div class="cap trailer__cc js-trailer-cc" aria-hidden="true"></div>
-  <h2 class="trailer__title" id="trailer-title">Watch: <br>Trailer</h2>
-  <button class="trailer__sound js-trailer-sound" type="button" aria-pressed="false">
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path></svg>
-    <span>Tap for sound</span>
-  </button>
-  <div class="trailer__controls">
-    <div class="trailer__seek js-seek" role="slider" tabindex="0" aria-label="Trailer position" aria-valuemin="0" aria-valuemax="299" aria-valuenow="0" aria-valuetext="0:00 of 4:58">
-      <div class="trailer__rail"><span class="trailer__buffer js-seek-buffer"></span><span class="trailer__fill js-seek-fill"></span></div>
-      <span class="trailer__knob js-seek-knob"></span>
-      <span class="trailer__hovertime js-seek-hover" aria-hidden="true">0:00</span>
-    </div>
-    <div class="trailer__row">
-      <button class="trailer__play js-trailer-play" type="button" aria-label="Play trailer">
-        <svg class="icon-play" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"></path></svg>
-        <svg class="icon-pause" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"></path></svg>
-      </button>
-      <span class="trailer__time"><span class="js-time-now">0:00</span> / <span class="js-time-total">4:58</span></span>
-      <button class="cc-btn trailer__ccbtn js-trailer-ccbtn js-cc" type="button" aria-pressed="true" aria-label="Captions">CC</button>
-    </div>
-  </div>
-</section>
-
-<section class="clips" aria-labelledby="clips-title">
-  <div class="clips__head">
-    <div>
-      <p class="label">Clips from the play</p>
-      <h2 class="h-display" id="clips-title">Stories from the stage</h2>
-      <p class="clips__credit">As performed by Cora Vanderbroek as Angela Martin</p>
-    </div>
-    <p class="clips__counter" aria-live="polite"><span class="js-clip-current">01</span> <span>/ 06</span></p>
-  </div>
-  <div class="clips__viewport">
-    <ul class="clips__track js-clips">
-      <li class="clip grain is-active"><img src="assets/img/clip-1.jpg" alt="" loading="lazy"><div class="shade"></div><button class="clip__play js-play" data-video="assets/video/clips/clip-1.mp4" type="button" aria-label="Play clip: Grandma Millie Sold the Farm"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#0E141C"></path></svg></button><div class="clip__caption"><span class="clip__label">Clip 1</span><span class="clip__title">Grandma Millie Sold the Farm</span></div></li>
-      <li class="clip grain"><img src="assets/img/clip-2.jpg" alt="" loading="lazy"><div class="shade"></div><button class="clip__play js-play" data-video="assets/video/clips/clip-2.mp4" type="button" aria-label="Play clip: Two Brothers, One Farm"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#0E141C"></path></svg></button><div class="clip__caption"><span class="clip__label">Clip 2</span><span class="clip__title">Two Brothers, One Farm</span></div></li>
-      <li class="clip grain"><img src="assets/img/clip-3.jpg" alt="" loading="lazy"><div class="shade"></div><button class="clip__play js-play" data-video="assets/video/clips/clip-3.mp4" type="button" aria-label="Play clip: The Map of His Kingdom"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#0E141C"></path></svg></button><div class="clip__caption"><span class="clip__label">Clip 3</span><span class="clip__title">The Map of His Kingdom</span></div></li>
-      <li class="clip grain"><img src="assets/img/clip-4.jpg" alt="" loading="lazy"><div class="shade"></div><button class="clip__play js-play" data-video="assets/video/clips/clip-4.mp4" type="button" aria-label="Play clip: Three Kids Who Want to Farm"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#0E141C"></path></svg></button><div class="clip__caption"><span class="clip__label">Clip 4</span><span class="clip__title">Three Kids Who Want to Farm</span></div></li>
-      <li class="clip grain"><img src="assets/img/clip-5.jpg" alt="" loading="lazy"><div class="shade"></div><button class="clip__play js-play" data-video="assets/video/clips/clip-5.mp4" type="button" aria-label="Play clip: The Changed Will"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#0E141C"></path></svg></button><div class="clip__caption"><span class="clip__label">Clip 5</span><span class="clip__title">The Changed Will</span></div></li>
-      <li class="clip grain"><img src="assets/img/clip-6.jpg" alt="" loading="lazy"><div class="shade"></div><button class="clip__play js-play" data-video="assets/video/clips/clip-6.mp4" type="button" aria-label="Play clip: Marilyn and Jerry's Plan"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#0E141C"></path></svg></button><div class="clip__caption"><span class="clip__label">Clip 6</span><span class="clip__title">Marilyn and Jerry's Plan</span></div></li>
-    </ul>
-  </div>
-  <div class="clips__controls">
-    <div class="clips__progress js-clip-dots"></div>
-    <button class="round-btn js-clip-prev" type="button" aria-label="Previous clip">←</button>
-    <button class="round-btn js-clip-next" type="button" aria-label="Next clip">→</button>
-  </div>
-</section>
-
 <!-- Full performance video, on Peoples Company's Vimeo account. The player loads only when clicked. -->
 <section class="section fullplay" id="full-play" aria-labelledby="fullplay-title">
   <div class="container">
@@ -295,7 +241,10 @@
         <p class="label">The complete performance</p>
         <h2 class="h-display" id="fullplay-title">Watch the full play</h2>
       </div>
-      <p class="fullplay__intro">See all of Map of My Kingdom, presented by Peoples Company. It opens with thoughts from Steve Bruere, President of Peoples Company; playwright Mary Swander; and director Matt Foss. It runs about 48 minutes. Watch it with your family, then talk about it.</p>
+      <div class="fullplay__intro">
+        <p>See all of Map of My Kingdom, presented by Peoples Company. It opens with thoughts from Steve Bruere, President of Peoples Company; playwright Mary Swander; and director Matt Foss. It runs about 48 minutes. Watch it with your family, then talk about it.</p>
+        <button class="link-cta link-cta--plain fullplay__trailer js-trailer-open" type="button" aria-haspopup="dialog" aria-controls="trailer">Watch the trailer →</button>
+      </div>
     </div>
     <div class="fullplay__frame">
       <a class="fullplay__poster js-fullplay" href="https://vimeo.com/1099731605" data-vimeo="1099731605" aria-label="Play the full performance of Map of My Kingdom (48 minutes)">
@@ -315,10 +264,19 @@
   </figure>
 </section>
 
-<section class="section" aria-labelledby="people-title">
+<!-- Colleen's bio is from her Iowa State Greenlee School alumni profile. -->
+<section class="section" id="film" aria-labelledby="people-title">
   <div class="container">
-    <p class="label">The people behind the play</p>
-    <h2 class="h-display" id="people-title">Writer and star</h2>
+    <div class="people__head">
+      <div>
+        <p class="label">From stage to screen</p>
+        <h2 class="h-display" id="people-title">Map of My Kingdom, the Movie</h2>
+      </div>
+      <div class="people__intro">
+        <p>Mary Swander wrote Map of My Kingdom for the stage. Now it's headed for the screen: a film adaptation is in development, with a screenplay by Colleen Bradford Krantz of Pink Spear Productions. More coming soon.</p>
+        <p class="people__cta"><a class="link-cta" href="mailto:info@mapofmykingdom.com?subject=Map%20of%20My%20Kingdom%20film%20updates">Get film updates →</a></p>
+      </div>
+    </div>
     <div class="people__grid">
       <article class="person">
         <img src="assets/img/mary-swander.jpg" alt="Mary Swander" width="200" height="260" loading="lazy">
@@ -329,11 +287,11 @@
         </div>
       </article>
       <article class="person">
-        <img src="assets/img/erika-kuhn.jpg" alt="Erika Kuhn" width="200" height="260" loading="lazy">
+        <img src="assets/img/colleen-krantz.jpg" alt="Colleen Bradford Krantz" width="200" height="260" loading="lazy">
         <div class="person__body">
-          <p class="person__role">Starring as Angela Martin</p>
-          <h3>Erika Kuhn</h3>
-          <p>An actor, playwright, and director. Her play Kill the Bird received the 2023 Broadway Licensing New Works grant and premiered at West Virginia Public Theatre. She holds a BA in performance from the University of Northern Iowa and an MFA in acting from West Virginia University.</p>
+          <p class="person__role">Screenwriter, Pink Spear Productions</p>
+          <h3>Colleen Bradford Krantz</h3>
+          <p>A television and film producer, screenwriter, author, and journalist. Her series and documentary films, including a regional Emmy winner, have been licensed to Netflix, Amazon Prime, and public television. Before turning to film, she spent a decade as a newspaper reporter at the <cite>St. Louis Post-Dispatch</cite>, <cite>Milwaukee Journal Sentinel</cite>, and <cite>The Des Moines Register</cite>, and wrote the award-winning book <cite>Train to Nowhere: Inside an Immigrant Death Investigation</cite>. She lives in Adel, Iowa.</p>
         </div>
       </article>
     </div>
@@ -365,6 +323,7 @@
         <figcaption>Steve Bruere, President, Peoples Company</figcaption>
       </figure>
       <p class="sponsor__punch">“The time to start planning is now.”</p>
+      <a class="sponsor__logo" href="https://peoplescompany.com/"><img src="assets/logos/peoples-company-white.png" alt="Peoples Company" width="210" height="57" loading="lazy"></a>
     </div>
   </div>
 </section>
@@ -423,23 +382,29 @@
   </div>
 </section>
 
-<section class="section film section--band" id="film" aria-labelledby="film-title">
-  <div class="container film__grid">
-    <div class="film__copy">
-      <p class="label">Coming soon</p>
-      <h2 class="h-display" id="film-title">Map of My Kingdom, the Movie</h2>
-      <p>Map of My Kingdom is headed for the screen. A film adaptation of the play is in development, bringing these stories of farm families, inheritance, and the land to audiences everywhere.</p>
-      <p>More coming soon.</p>
-      <p class="film__cta"><a class="link-cta" href="mailto:info@mapofmykingdom.com?subject=Map%20of%20My%20Kingdom%20film%20updates">Get film updates →</a></p>
+<section class="clips" id="clips" aria-labelledby="clips-title">
+  <div class="clips__head">
+    <div>
+      <p class="label">Clips from the play</p>
+      <h2 class="h-display" id="clips-title">Stories from the stage</h2>
+      <p class="clips__credit">As performed by Cora Vanderbroek as Angela Martin</p>
     </div>
-    <!-- Bio from Colleen's Iowa State Greenlee School alumni profile. -->
-    <article class="film__person">
-      <img class="film__photo" src="assets/img/colleen-krantz.jpg" alt="Colleen Bradford Krantz" width="150" height="195" loading="lazy">
-      <p class="person__role">Screenwriter</p>
-      <h3>Colleen Bradford Krantz</h3>
-      <p class="film__company">Pink Spear Productions</p>
-      <p>A television and film producer, screenwriter, author, and journalist. Her series and documentary films, including a regional Emmy winner, have been licensed to Netflix, Amazon Prime, and public television. Before turning to film, she spent a decade as a newspaper reporter at the <cite>St. Louis Post-Dispatch</cite>, <cite>Milwaukee Journal Sentinel</cite>, and <cite>The Des Moines Register</cite>, and wrote the award-winning book <cite>Train to Nowhere: Inside an Immigrant Death Investigation</cite>. She lives in Adel, Iowa.</p>
-    </article>
+    <p class="clips__counter" aria-live="polite"><span class="js-clip-current">01</span> <span>/ 06</span></p>
+  </div>
+  <div class="clips__viewport">
+    <ul class="clips__track js-clips">
+      <li class="clip grain is-active"><img src="assets/img/clip-1.jpg" alt="" loading="lazy"><div class="shade"></div><button class="clip__play js-play" data-video="assets/video/clips/clip-1.mp4" type="button" aria-label="Play clip: Grandma Millie Sold the Farm"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#0E141C"></path></svg></button><div class="clip__caption"><span class="clip__label">Clip 1</span><span class="clip__title">Grandma Millie Sold the Farm</span></div></li>
+      <li class="clip grain"><img src="assets/img/clip-2.jpg" alt="" loading="lazy"><div class="shade"></div><button class="clip__play js-play" data-video="assets/video/clips/clip-2.mp4" type="button" aria-label="Play clip: Two Brothers, One Farm"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#0E141C"></path></svg></button><div class="clip__caption"><span class="clip__label">Clip 2</span><span class="clip__title">Two Brothers, One Farm</span></div></li>
+      <li class="clip grain"><img src="assets/img/clip-3.jpg" alt="" loading="lazy"><div class="shade"></div><button class="clip__play js-play" data-video="assets/video/clips/clip-3.mp4" type="button" aria-label="Play clip: The Map of His Kingdom"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#0E141C"></path></svg></button><div class="clip__caption"><span class="clip__label">Clip 3</span><span class="clip__title">The Map of His Kingdom</span></div></li>
+      <li class="clip grain"><img src="assets/img/clip-4.jpg" alt="" loading="lazy"><div class="shade"></div><button class="clip__play js-play" data-video="assets/video/clips/clip-4.mp4" type="button" aria-label="Play clip: Three Kids Who Want to Farm"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#0E141C"></path></svg></button><div class="clip__caption"><span class="clip__label">Clip 4</span><span class="clip__title">Three Kids Who Want to Farm</span></div></li>
+      <li class="clip grain"><img src="assets/img/clip-5.jpg" alt="" loading="lazy"><div class="shade"></div><button class="clip__play js-play" data-video="assets/video/clips/clip-5.mp4" type="button" aria-label="Play clip: The Changed Will"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#0E141C"></path></svg></button><div class="clip__caption"><span class="clip__label">Clip 5</span><span class="clip__title">The Changed Will</span></div></li>
+      <li class="clip grain"><img src="assets/img/clip-6.jpg" alt="" loading="lazy"><div class="shade"></div><button class="clip__play js-play" data-video="assets/video/clips/clip-6.mp4" type="button" aria-label="Play clip: Marilyn and Jerry's Plan"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#0E141C"></path></svg></button><div class="clip__caption"><span class="clip__label">Clip 6</span><span class="clip__title">Marilyn and Jerry's Plan</span></div></li>
+    </ul>
+  </div>
+  <div class="clips__controls">
+    <div class="clips__progress js-clip-dots"></div>
+    <button class="round-btn js-clip-prev" type="button" aria-label="Previous clip">←</button>
+    <button class="round-btn js-clip-next" type="button" aria-label="Next clip">→</button>
   </div>
 </section>
 
@@ -513,7 +478,38 @@
 
 </main>
 
-<dialog class="player" id="player" aria-label="Clip player">
+<!-- Trailer pop-up (opened by the hero play button). Crops off the burned-in subtitles and draws its own captions. -->
+<dialog class="player player--trailer js-trailer-dialog" id="trailer" aria-label="Map of My Kingdom trailer">
+  <button class="player__close js-trailer-close" type="button" aria-label="Close trailer">×</button>
+  <div class="trailer">
+    <video class="js-trailer" playsinline preload="none" poster="assets/img/trailer-poster.jpg" aria-label="Map of My Kingdom trailer">
+      <source src="assets/video/trailer.mp4" type="video/mp4">
+      <track kind="captions" srclang="en" label="English" src="assets/captions/trailer.vtt" default>
+    </video>
+    <div class="trailer__blackout"></div>
+    <div class="trailer__captions" aria-hidden="true"><p class="trailer__line js-trailer-line"></p></div>
+    <p class="trailer__countdown js-trailer-countdown" aria-hidden="true"></p>
+    <div class="cap trailer__cc js-trailer-cc" aria-hidden="true"></div>
+    <div class="trailer__controls">
+      <div class="trailer__seek js-seek" role="slider" tabindex="0" aria-label="Trailer position" aria-valuemin="0" aria-valuemax="299" aria-valuenow="0" aria-valuetext="0:00 of 4:58">
+        <div class="trailer__rail"><span class="trailer__buffer js-seek-buffer"></span><span class="trailer__fill js-seek-fill"></span></div>
+        <span class="trailer__knob js-seek-knob"></span>
+        <span class="trailer__hovertime js-seek-hover" aria-hidden="true">0:00</span>
+      </div>
+      <div class="trailer__row">
+        <button class="trailer__play js-trailer-play" type="button" aria-label="Play trailer">
+          <svg class="icon-play" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"></path></svg>
+          <svg class="icon-pause" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"></path></svg>
+        </button>
+        <span class="trailer__time"><span class="js-time-now">0:00</span> / <span class="js-time-total">4:58</span></span>
+        <button class="cc-btn trailer__ccbtn js-trailer-ccbtn js-cc" type="button" aria-pressed="true" aria-label="Captions">CC</button>
+      </div>
+    </div>
+  </div>
+  <div class="player__bar"><p class="player__title">Map of My Kingdom: Trailer</p></div>
+</dialog>
+
+<dialog class="player" id="player" aria-label="Video player">
   <button class="player__close js-player-close" type="button" aria-label="Close player">×</button>
   <div class="player__frame">
     <video class="player__video" controls playsinline preload="none"></video>
